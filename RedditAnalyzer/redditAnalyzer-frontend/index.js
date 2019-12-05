@@ -11,9 +11,14 @@ let reRankArr = [];
 
 let responses = [];
 
+// let hiddenLoad = document.getElementById("loading-image")
+// hiddenLoad.style.display = "none";
+
 document.addEventListener('DOMContentLoaded', () => {
   let hiddenApp = document.getElementById("3a")
   hiddenApp.style.display = "none";
+
+ 
 
     console.log('DOM fully loaded and parsed');
     login();
@@ -23,19 +28,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function login(){
         const loginContainer = document.getElementById("2a") 
         let taco = document.getElementById("1a")
+        let hiddenLoad = document.getElementById("loading")
+        hiddenLoad.style.display = "none";
         taco.addEventListener('click', event => {
             event.preventDefault();
             const userNameInput = document.getElementById('usrLogin').value;
             fetchUserPost(userNameInput, loginContainer);
-            let hiddenApp = document.getElementById("3a")
         })
     }
-
 
     const handleSubmit = e => {
       responses = [];
 
         event.preventDefault();
+        let hiddenLoad = document.getElementById("loading")
+        hiddenLoad.style.display = "block";
         const userInput = document.getElementById('user').value;
         fetchPosts(userInput);
       };
@@ -142,6 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
           let instanceArr = [userString[0], commentsInt, scoreInt]
 
+          let hiddenLoad = document.getElementById("loading")
+          hiddenLoad.style.display = "none";
+
           reRankArr.push(instanceArr) 
           }
 
@@ -169,6 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
           const container = document.getElementById('results-container');
           container.append(redditCard, redditCardBreak)
         }}, 3000)
+        window.onload = function () {
+
+          $("#loading").hide();    
+          
+             };
       }
 
       const analyzePosts = (allPosts) => {
@@ -223,7 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let upsH5 = document.createElement('h5')
         upsH5.innerText = "Highest Scored Comment"
         upsBody.textContent = upsSort[0][1]
-        upsBody.href = `${upsSort[0][6]}`
+        let upsLink = upsSort[0][6]
+        upsBody.href = upsLink
 
         upsDisplay.append(upsH5, upsNumber, upsBody)
 
@@ -267,12 +283,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let gildedH5 = document.createElement('h5')
         gildedH5.innerText = "Most Gildings on Comments"
         gildedBody.textContent = gildedSort[0][1]
-        gildedBody.href = `${gildedSort[0][6]}`
+        let gildedLink = gildedSort[0][6]
+        gildedBody.href = gildedLink
 
         gildedDisplay.append(gildedH5, gildedNumber, gildedBody)
-        let autoHeight = document.getElementById("second-results")
-
-        autoHeight.style.height = "auto"
 
         if(gildedSort[0][7] < 1){
           gildedDisplay.removeChild(gildedBody, gildedH5, gildedNumber)
@@ -399,5 +413,7 @@ function piechart(ar){
             }
           });
     }
+
+
 
     })
