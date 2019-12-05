@@ -1,8 +1,8 @@
 let sample_account_name = "spez"
 const sample_account_URL = `https://www.reddit.com/user/${sample_account_name}/comments/.json`
 
-const postsPerRequest = 500;
-const maxPostsToFetch = 10;
+const postsPerRequest = 100;
+const maxPostsToFetch = 500;
 const maxRequests = maxPostsToFetch / postsPerRequest
 
 let reRankArr = [];
@@ -295,7 +295,7 @@ function piechart(ar){
           let found = userData.find(user => user.username === input)
           if(found){loginContainer.style.display = "none";
           console.log("The user found")}
-          else{console.log("Please rigester first")}
+          else{console.log("Please register first")}
         });
     }
 
