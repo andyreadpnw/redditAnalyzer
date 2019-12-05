@@ -3,8 +3,8 @@
 let sample_account_name = "spez"
 const sample_account_URL = `https://www.reddit.com/user/${sample_account_name}/comments/.json`
 
-const postsPerRequest = 5;
-const maxPostsToFetch = 10;
+const postsPerRequest = 100;
+const maxPostsToFetch = 500;
 const maxRequests = maxPostsToFetch / postsPerRequest
 
 let reRankArr = [];
@@ -12,6 +12,9 @@ let reRankArr = [];
 let responses = [];
 
 document.addEventListener('DOMContentLoaded', () => {
+  let hiddenApp = document.getElementById("3a")
+  hiddenApp.style.display = "none";
+
     console.log('DOM fully loaded and parsed');
     login();
 
@@ -21,8 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let taco = document.getElementById("1a")
         taco.addEventListener('click', event => {
             event.preventDefault();
-            console.dir(loginContainer)
             loginContainer.style.display = "none";
+            let hiddenApp = document.getElementById("3a")
+            hiddenApp.style.display = "block";
         })
     }
 
@@ -40,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
           `https://www.reddit.com/user/${userInput}/comments/.json?limit=${postsPerRequest}${
             afterParam ? '&after=' + afterParam : ''
           }`
-        );
-        // console.log(response)
+        )
+        //console.log(response)
         const responseJSON = await response.json();
         responses.push(responseJSON);
       
@@ -61,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         ////////////////send the posts to analyzePosts function
         analyzePosts(allPosts)
+        
         ///////////////////////////////////////////////
 
         statsByUser = {};
@@ -81,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }));
       
         const sortedList = userList.sort((userA, userB) => userB.score - userA.score);
+
       
         displayRankings(sortedList);
         allPosts = [];
@@ -167,54 +173,107 @@ document.addEventListener('DOMContentLoaded', () => {
       const analyzePosts = (allPosts) => {
        
         let postInstanceArr = [];
+        let postInstanceArr2 = [];
+        let postInstanceArr3 = [];
 
         for(let d = 0; allPosts.length > d; d++){
           let body = allPosts[d].data.body
           let score = allPosts[d].data.score
-          let totalAwards = allPosts[d].data.total_awards_recieved
           let num_comments = allPosts[d].data.num_comments
           let link_permalink = allPosts[d].data.link_permalink
           let downs = allPosts[d].data.downs
           let ups = allPosts[d].data.ups
           let link_url = allPosts[d].data.link_url
+          let gilded = allPosts[d].data.gilded
+          let subreddit = allPosts[d].data.subreddit
 
-          let thisPost = [score, body, totalAwards, num_comments, link_permalink, downs, ups, link_url]
+          let thisPost = [score, body, num_comments, link_permalink, downs, ups, link_url, gilded, subreddit]
           postInstanceArr.push(thisPost)
+          postInstanceArr2.push(thisPost)
+          postInstanceArr3.push(thisPost)
 
         }
 
-        console.log(postInstanceArr)
+  
+        gildedSort(postInstanceArr)
 
-        numCommentsSort(postInstanceArr);
+        numCommentsSort(postInstanceArr2)
 
-        downsSort(postInstanceArr);
-
-        upsSort(postInstanceArr);
+        upsSort(postInstanceArr3);
       }
 
-      const numCommentsSort = (postInstanceArr) => {
-        let numCommentsSort = [];
-        numCommentsSort = postInstanceArr.sort(function(a, b) {
-          return b[3] - a[3];
-        });
-        console.log(numCommentsSort)
-      }
-
-      const downsSort = (postInstanceArr) => {
-        let downsSort = [];
-        downsSort = postInstanceArr.sort(function(a, b) {
-          return b[6] - a[6];
-        });
-        console.log(downsSort)
-      }
-
-      const upsSort = (postInstanceArr) => {
+      const upsSort = (postInstanceArr3) => {
         let upsSort = [];
-        upsSort = postInstanceArr.sort(function(a, b) {
+        upsSort = postInstanceArr3.sort(function(a, b) {
+          return b[5] - a[5];
+        });
+
+        let upsDisplay = document.getElementById("results-highscore-container")
+        upsDisplay.innerHTML = ""
+
+        let upsNumber = document.createElement('a')
+        upsNumber.textContent = upsSort[0][5] + " " + "Karma" + " "
+        let upsBody = document.createElement('a')
+        let upsH5 = document.createElement('h5')
+        upsH5.innerText = "Highest Scored Comment"
+        upsBody.textContent = upsSort[0][1]
+        upsBody.href = `${upsSort[0][6]}`
+
+        upsDisplay.append(upsH5, upsNumber, upsBody)
+
+      }
+
+      const numCommentsSort = (postInstanceArr2) => {
+        let numCommentsSort = [];
+        numCommentsSort = postInstanceArr2.sort(function(a, b) {
+          return b[2] - a[2];
+        });
+
+        let numCommentsDisplay = document.getElementById("results-highcomments-container")
+        numCommentsDisplay.innerHTML = ""
+
+        let numCommentsNumber = document.createElement('a')
+        numCommentsNumber.textContent = numCommentsSort[0][2] + " " + "Comment Children(s)" + " "
+        let numCommentsBody = document.createElement('a')
+        let numCommentsH5 = document.createElement('h5')
+        numCommentsH5.innerText = "Highest Number of Comment Children"
+        numCommentsBody.textContent = numCommentsSort[0][1]
+        numCommentsBody.href = `${numCommentsSort[0][6]}`
+
+        numCommentsDisplay.append(numCommentsH5, numCommentsNumber, numCommentsBody)
+       
+      }
+
+      const gildedSort = (postInstanceArr) => {
+        let gildedSort = [];
+        gildedSort = postInstanceArr.sort(function(a, b) {
           return b[7] - a[7];
         });
-        console.log(upsSort)
-      }
 
+        let gildedDisplay = document.getElementById("results-highgilded-container")
+        gildedDisplay.innerHTML = ""
+
+        let gildedNumber = document.createElement('a')
+
+
+        gildedNumber.textContent = gildedSort[0][7] + " " + "Gilding(s)" + " "
+        let gildedBody = document.createElement('a')
+        let gildedH5 = document.createElement('h5')
+        gildedH5.innerText = "Most Gildings on Comments"
+        gildedBody.textContent = gildedSort[0][1]
+        gildedBody.href = `${gildedSort[0][6]}`
+
+        gildedDisplay.append(gildedH5, gildedNumber, gildedBody)
+        let autoHeight = document.getElementById("second-results")
+
+        autoHeight.style.height = "auto"
+
+        if(gildedSort[0][7] < 1){
+          gildedDisplay.removeChild(gildedBody, gildedH5, gildedNumber)
+          let neverGuild = document.createElement('a')
+          neverGuild.innerText = "Not Yet Recieved Gold"
+          gildedDisplay.append(neverGuild)
+        }
+      }
 
     })
