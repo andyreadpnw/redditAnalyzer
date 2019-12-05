@@ -1,5 +1,14 @@
-let sample_account_name = "spez"
-const sample_account_URL = `https://www.reddit.com/user/${sample_account_name}/comments/.json`
+
+
+let userName = "spez"
+let userSearchName = "spez"
+let gildedLink = ""
+let gildedNum 
+let gildedBod = ""
+let upsLink = ""
+let upsbod = ""
+let upsNum 
+let fav_sub = ""
 
 const postsPerRequest = 100;
 const maxPostsToFetch = 500;
@@ -10,6 +19,9 @@ let reRankArr = [];
 let responses = [];
 
 document.addEventListener('DOMContentLoaded', () => {
+  let hiddenApp = document.getElementById("3a")
+  hiddenApp.style.display = "none";
+
     console.log('DOM fully loaded and parsed');
     login();
     signUp();
@@ -21,8 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         taco.addEventListener('click', event => {
             event.preventDefault();
             const userNameInput = document.getElementById('usrLogin').value;
+            userName = userNameInput
             fetchUserPost(userNameInput, loginContainer);
-            // loginContainer.style.display = "none";
+            let hiddenApp = document.getElementById("3a")
         })
     }
 
@@ -32,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         event.preventDefault();
         const userInput = document.getElementById('user').value;
+        userSearchName = userInput
         fetchPosts(userInput);
       };
       
@@ -40,13 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
           `https://www.reddit.com/user/${userInput}/comments/.json?limit=${postsPerRequest}${
             afterParam ? '&after=' + afterParam : ''
           }`
-        );
-        
+        )
+        //console.log(response)
         const responseJSON = await response.json();
         responses.push(responseJSON);
-        // console.dir(responseJSON.data.children)
-   
-        // console.dir(list)
+      
         if (responseJSON.data.after && responses.length < maxRequests) {
           fetchPosts(userInput, responseJSON.data.after);
           return;
@@ -60,14 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
         responses.forEach(response => {
           allPosts.push(...response.data.children);
         });
-
- 
- 
-    //    const list= allPosts.map(child => child.data.subreddit)
-    //    subredditsCount(list)
-    //    console.log(subredditsCount(list))
+        
         ////////////////send the posts to analyzePosts function
         analyzePosts(allPosts)
+        
         ///////////////////////////////////////////////
 
         statsByUser = {};
@@ -88,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }));
       
         const sortedList = userList.sort((userA, userB) => userB.score - userA.score);
+
       
         displayRankings(sortedList);
         allPosts = [];
@@ -174,63 +183,125 @@ document.addEventListener('DOMContentLoaded', () => {
       const analyzePosts = (allPosts) => {
        
         let postInstanceArr = [];
+        let postInstanceArr2 = [];
+        let postInstanceArr3 = [];
 
         for(let d = 0; allPosts.length > d; d++){
           let body = allPosts[d].data.body
           let score = allPosts[d].data.score
-          let totalAwards = allPosts[d].data.total_awards_recieved
           let num_comments = allPosts[d].data.num_comments
           let link_permalink = allPosts[d].data.link_permalink
           let downs = allPosts[d].data.downs
           let ups = allPosts[d].data.ups
           let link_url = allPosts[d].data.link_url
+          let gilded = allPosts[d].data.gilded
           let subreddit = allPosts[d].data.subreddit
-          let thisPost = [score, body, totalAwards, num_comments, link_permalink, downs, ups, link_url, subreddit]
+
+          let thisPost = [score, body, num_comments, link_permalink, downs, ups, link_url, gilded, subreddit]
           postInstanceArr.push(thisPost)
+          postInstanceArr2.push(thisPost)
+          postInstanceArr3.push(thisPost)
 
         }
 
-        
-
-        numCommentsSort(postInstanceArr);
-
-        const list= postInstanceArr.map(child => child[8]);
+        const list = postInstanceArr.map(child => child[8]);
 
         console.log(top5Subreddit(list));
 
         piechart(top5Subreddit(list));
 
-        downsSort(postInstanceArr);
+        gildedSort(postInstanceArr)
 
-        upsSort(postInstanceArr);
+        numCommentsSort(postInstanceArr2)
+
+        upsSort(postInstanceArr3);
+        fetchUserSearch()
       }
 
-      const numCommentsSort = (postInstanceArr) => {
-        let numCommentsSort = [];
-        numCommentsSort = postInstanceArr.sort(function(a, b) {
-          return b[3] - a[3];
-        });
-        // console.log(numCommentsSort)
-      }
-
-      const downsSort = (postInstanceArr) => {
-        let downsSort = [];
-        downsSort = postInstanceArr.sort(function(a, b) {
-          return b[6] - a[6];
-        });
-        // console.log(downsSort)
-      }
-
-      const upsSort = (postInstanceArr) => {
+      const upsSort = (postInstanceArr3) => {
         let upsSort = [];
-        upsSort = postInstanceArr.sort(function(a, b) {
+        upsSort = postInstanceArr3.sort(function(a, b) {
+          return b[5] - a[5];
+        });
+
+        let upsDisplay = document.getElementById("results-highscore-container")
+        upsDisplay.innerHTML = ""
+
+        let upsNumber = document.createElement('a')
+        upsNum = upsSort[0][5]
+        upsNumber.textContent = upsSort[0][5] + " " + "Karma" + " "
+        let upsBody = document.createElement('a')
+        let upsH5 = document.createElement('h5')
+        upsH5.innerText = "Highest Scored Comment"
+        upsbod = upsSort[0][1]
+        upsBody.textContent = upsbod
+        upsLink = upsSort[0][6]
+        upsBody.href = upsLink
+
+        upsDisplay.append(upsH5, upsNumber, upsBody)
+
+      }
+
+      const numCommentsSort = (postInstanceArr2) => {
+        let numCommentsSort = [];
+        numCommentsSort = postInstanceArr2.sort(function(a, b) {
+          return b[2] - a[2];
+        });
+
+        let numCommentsDisplay = document.getElementById("results-highcomments-container")
+        numCommentsDisplay.innerHTML = ""
+
+        let numCommentsNumber = document.createElement('a')
+        numCommentsNumber.textContent = numCommentsSort[0][2] + " " + "Comment Children(s)" + " "
+        let numCommentsBody = document.createElement('a')
+        let numCommentsH5 = document.createElement('h5')
+        numCommentsH5.innerText = "Highest Number of Comment Children"
+        numCommentsBody.textContent = numCommentsSort[0][1]
+        numCommentsBody.href = `${numCommentsSort[0][6]}`
+
+        numCommentsDisplay.append(numCommentsH5, numCommentsNumber, numCommentsBody)
+       
+      }
+
+      const gildedSort = (postInstanceArr) => {
+        let gildedSort = [];
+        gildedSort = postInstanceArr.sort(function(a, b) {
           return b[7] - a[7];
         });
-        // console.log(upsSort)
+
+        let gildedDisplay = document.getElementById("results-highgilded-container")
+        gildedDisplay.innerHTML = ""
+
+        let gildedNumber = document.createElement('a')
+
+        gildedNum = gildedSort[0][7]
+        gildedBod = gildedSort[0][1]
+        gildedNumber.textContent = gildedNum + " " + "Gilding(s)" + " "
+        let gildedBody = document.createElement('a')
+        let gildedH5 = document.createElement('h5')
+        gildedH5.innerText = "Most Gildings on Comments"
+        gildedBody.textContent = gildedBod
+        gildedLink = gildedSort[0][6]
+        gildedBody.href = gildedLink
+
+        gildedDisplay.append(gildedH5, gildedNumber, gildedBody)
+        let autoHeight = document.getElementById("second-results")
+
+        autoHeight.style.height = "auto"
+
+        if(gildedSort[0][7] < 1){
+          gildedDisplay.removeChild(gildedBody, gildedH5, gildedNumber)
+          let neverGuild = document.createElement('a')
+          neverGuild.innerText = "Not Yet Recieved Gold"
+          gildedDisplay.append(neverGuild)
+        }
       }
 
       function top5Subreddit(listsubreddit){
-        return subredditsCount(listsubreddit).slice(0, 5)
+        top5 = subredditsCount(listsubreddit).slice(0, 5)
+        fav_sub = top5[0][0]
+        console.log(fav_sub)
+        return top5
       }
 
       function subredditsCount(listsubreddit){
@@ -294,8 +365,9 @@ function piechart(ar){
         fetch(`http://127.0.0.1:3000/users`).then(resp => resp.json()).then(function(userData){
           let found = userData.find(user => user.username === input)
           if(found){loginContainer.style.display = "none";
-          console.log("The user found")}
-          else{console.log("Please register first")}
+          console.log("The user found")
+          hiddenApp.style.display = "block";}
+          else{console.log("Please regester first")}
         });
     }
 
@@ -311,7 +383,7 @@ function piechart(ar){
             const singUpForm = document.createElement('form')
             signUpH2.innerHTML= "SignUp"
             const signUpinputName = document.createElement('input')
-            signUpinputName.value ="Name"
+            signUpinputName.value ="Password"
             const signUpinputUserName = document.createElement('input')
             const submit= document.createElement('button')
             submit.innerText="Submit"
@@ -326,7 +398,6 @@ function piechart(ar){
                 e.preventDefault();
                 fetchSignup(signUpinputName.value, signUpinputUserName.value)
             })
-            // loginContainer(userNameInput, loginContainer);
         })
     }
 
@@ -346,8 +417,34 @@ function piechart(ar){
             }
           });
     }
-
-
-
-})
-
+  
+    function fetchUserSearch(){
+      fetch(`http://127.0.0.1:3000/user_searches`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+      },
+      body: JSON.stringify({
+        // username: userName,
+        username: userName, 
+        user_search: {
+        reddit_username: userSearchName,
+        top_listing_name: upsbod,
+        top_listing_likes: upsNum,
+        top_listing_link: upsLink,
+        fav_sub_name: fav_sub,
+        most_children_name: gildedBod,
+        Most_children_likes: gildedNum, 
+        most_children_link: gildedLink
+      }
+      })
+      }).then(function(resp) {
+        if (Math.floor(resp.status/200) === 1) {
+          console.log("Great ")
+        } else {
+          console.log("ERROR", resp)
+        }
+      })
+    }
+  })

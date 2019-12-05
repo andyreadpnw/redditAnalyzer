@@ -1,0 +1,26 @@
+
+#results-container {
+    float: left;
+    width: 26%;
+    padding: 10px;
+    border:1px solid black;
+    display: flex;
+    flex: 50%;
+
+}
+
+#second-results {
+    float: left;
+    width:74%;
+    padding: 10px;
+    border:1px solid black;
+    flex: 50%;
+
+} 
+
+.card {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
