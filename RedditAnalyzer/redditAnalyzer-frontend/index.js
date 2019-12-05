@@ -10,6 +10,7 @@ let upsbod = ""
 let upsNum 
 let fav_sub = ""
 
+
 const postsPerRequest = 100;
 const maxPostsToFetch = 500;
 const maxRequests = maxPostsToFetch / postsPerRequest
@@ -18,9 +19,11 @@ let reRankArr = [];
 
 let responses = [];
 
+
 document.addEventListener('DOMContentLoaded', () => {
   let hiddenApp = document.getElementById("3a")
   hiddenApp.style.display = "none";
+
 
     console.log('DOM fully loaded and parsed');
     login();
@@ -29,13 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function login(){
         const loginContainer = document.getElementById("2a") 
-        let taco = document.getElementById("1a")
-        taco.addEventListener('click', event => {
+        let loginSubmit = document.getElementById("1a")
+        let hiddenLoad = document.getElementById("loading")
+        hiddenLoad.style.display = "none";
+
+        loginSubmit.addEventListener('click', event => {
             event.preventDefault();
             const userNameInput = document.getElementById('usrLogin').value;
             userName = userNameInput
             fetchUserPost(userNameInput, loginContainer);
-            let hiddenApp = document.getElementById("3a")
         })
     }
 
@@ -44,8 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
       responses = [];
 
         event.preventDefault();
+
+        let hiddenLoad = document.getElementById("loading")
+        hiddenLoad.style.display = "block";
         const userInput = document.getElementById('user').value;
-        userSearchName = userInput
+       userSearchName = userInput
+
         fetchPosts(userInput);
       };
       
@@ -151,6 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
           let instanceArr = [userString[0], commentsInt, scoreInt]
 
+          let hiddenLoad = document.getElementById("loading")
+          hiddenLoad.style.display = "none";
+
           reRankArr.push(instanceArr) 
           }
 
@@ -178,6 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const container = document.getElementById('results-container');
           container.append(redditCard, redditCardBreak)
         }}, 3000)
+
+        window.onload = function () {
+
+          $("#loading").hide();    
+          
+             };
+
       }
 
       const analyzePosts = (allPosts) => {
@@ -215,7 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
         numCommentsSort(postInstanceArr2)
 
         upsSort(postInstanceArr3);
+
         fetchUserSearch()
+
       }
 
       const upsSort = (postInstanceArr3) => {
@@ -228,7 +249,9 @@ document.addEventListener('DOMContentLoaded', () => {
         upsDisplay.innerHTML = ""
 
         let upsNumber = document.createElement('a')
+
         upsNum = upsSort[0][5]
+
         upsNumber.textContent = upsSort[0][5] + " " + "Karma" + " "
         let upsBody = document.createElement('a')
         let upsH5 = document.createElement('h5')
@@ -236,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         upsbod = upsSort[0][1]
         upsBody.textContent = upsbod
         upsLink = upsSort[0][6]
+
         upsBody.href = upsLink
 
         upsDisplay.append(upsH5, upsNumber, upsBody)
@@ -285,9 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gildedBody.href = gildedLink
 
         gildedDisplay.append(gildedH5, gildedNumber, gildedBody)
-        let autoHeight = document.getElementById("second-results")
 
-        autoHeight.style.height = "auto"
 
         if(gildedSort[0][7] < 1){
           gildedDisplay.removeChild(gildedBody, gildedH5, gildedNumber)
@@ -383,7 +405,7 @@ function piechart(ar){
             const singUpForm = document.createElement('form')
             signUpH2.innerHTML= "SignUp"
             const signUpinputName = document.createElement('input')
-            signUpinputName.value ="Password"
+            signUpinputName.value =""
             const signUpinputUserName = document.createElement('input')
             const submit= document.createElement('button')
             submit.innerText="Submit"

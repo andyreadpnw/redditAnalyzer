@@ -40,15 +40,20 @@
             
              <div id="3a">
 
-                <h1>User Comment Search</h1>
+
+                <h1 id="userh1">Reddit User Comment History Analyzer</h1>
                 <form id="user-select-form">
                   <label>Username: </label>
                   <input id="user">
-                  <button type="submit">Rank</button>
+                  <button type="submit">Display Results</button>
                 </form>
+                <div id="loading">
+                    <img id="loading-image" src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_11.gif" alt="Loading..." />
+                  </div>
+                <div class="container">
                 <div id="results-container" class="card" style="box-sizing: border-box">
-                    <h5>Searched Users Ranked</h5>
-                </div>
+                    <h5>Searched Users Ranked</h5> 
+                </div>  
                 <div id="second-results" class="card"style="box-sizing: border-box">
                     <div id="results-highscore-container">
                     </div><br>
@@ -56,13 +61,13 @@
                     </div><br>
                     <div id="results-highgilded-container">
                     </div>
+
+                    <canvas id="myChart"></canvas>
+                </div> 
                 </div>
 
-             </div>
-             <div class="container">
-                <canvas id="myChart"></canvas>
-            </div>
 
+             </div>
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
