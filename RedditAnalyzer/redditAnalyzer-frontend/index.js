@@ -27,9 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             const userNameInput = document.getElementById('usrLogin').value;
             fetchUserPost(userNameInput, loginContainer);
-            loginContainer.style.display = "none";
             let hiddenApp = document.getElementById("3a")
-            hiddenApp.style.display = "block";
         })
     }
 
@@ -284,6 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      function top5Subreddit(listsubreddit){
+        return subredditsCount(listsubreddit).slice(0, 5)
+      }
 
       function subredditsCount(listsubreddit){
         const array = listsubreddit.map(e => SubredditNum(listsubreddit, e))
@@ -346,8 +347,9 @@ function piechart(ar){
         fetch(`http://127.0.0.1:3000/users`).then(resp => resp.json()).then(function(userData){
           let found = userData.find(user => user.username === input)
           if(found){loginContainer.style.display = "none";
-          console.log("The user found")}
-          else{console.log("Please rigester first")}
+          console.log("The user found")
+          hiddenApp.style.display = "block";}
+          else{console.log("Please regester first")}
         });
     }
 
@@ -378,7 +380,6 @@ function piechart(ar){
                 e.preventDefault();
                 fetchSignup(signUpinputName.value, signUpinputUserName.value)
             })
-            // loginContainer(userNameInput, loginContainer);
         })
     }
 
