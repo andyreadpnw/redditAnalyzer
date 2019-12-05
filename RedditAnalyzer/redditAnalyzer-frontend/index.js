@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('DOM fully loaded and parsed');
     login();
+    signUp();
 
 
   function login(){
@@ -24,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let taco = document.getElementById("1a")
         taco.addEventListener('click', event => {
             event.preventDefault();
+            const userNameInput = document.getElementById('usrLogin').value;
+            fetchUserPost(userNameInput, loginContainer);
             loginContainer.style.display = "none";
             let hiddenApp = document.getElementById("3a")
             hiddenApp.style.display = "block";
@@ -194,7 +197,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }
 
-  
+        const list = postInstanceArr.map(child => child[8]);
+
+        console.log(top5Subreddit(list));
+
+        piechart(top5Subreddit(list));
+
         gildedSort(postInstanceArr)
 
         numCommentsSort(postInstanceArr2)
@@ -275,5 +283,120 @@ document.addEventListener('DOMContentLoaded', () => {
           gildedDisplay.append(neverGuild)
         }
       }
+
+
+      function subredditsCount(listsubreddit){
+        const array = listsubreddit.map(e => SubredditNum(listsubreddit, e))
+        let unique = array.map(ar=>JSON.stringify(ar))
+                .filter((itm, idx, arr) => arr.indexOf(itm) === idx)
+                 .map(str=>JSON.parse(str));
+        let uniqueSorted = unique.sort(function(a, b){return b[1]-a[1]})
+        return uniqueSorted
+      }
+
+
+      function SubredditNum(arr, e){  
+        let h = [e]
+        arr.reduce(function(memo, num){ 
+                     if(num===e)
+                        { memo +=1 }
+                    return h[1] = memo}, 0) 
+        return h  
+        }
+function piechart(ar){
+      let total= ar[0][1]+ar[1][1]+ar[2][1]+ar[3][1]+ar[4][1]
+       const reddit1Lables = ar[0][0] + " " + Math.round(100*(ar[0][1])/total)+ "%"
+       const reddit2Lables = ar[1][0] + " " + Math.round(100*(ar[1][1])/total)+ "%"
+       const reddit3Lables = ar[2][0] + " " + Math.round(100*(ar[2][1])/total)+ "%"
+       const reddit4Lables = ar[3][0] + " " + Math.round(100*(ar[3][1])/total)+ "%"
+       const reddit5Lables = ar[4][0] + " " + Math.round(100*(ar[4][1])/total)+ "%"
+
+        let labels = [reddit1Lables, reddit2Lables, reddit3Lables, reddit4Lables, reddit5Lables];
+        let data = [
+            100*(ar[0][1])/total,
+            100*(ar[1][1])/total,
+            100*(ar[2][1])/total,
+            100*(ar[3][1])/total,
+            100*(ar[4][1])/total
+        ];
+        let pie = document.getElementById("myChart").getContext('2d');
+        let myChart = new Chart(pie, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data,
+                        borderColor: ['rgba(160, 42, 192, 1)','rgba(47, 42, 192, 1)','rgba(75, 192, 192, 1)', 'rgba(192, 0, 0, 1)','rgba(192, 75, 192, 0.5)'],
+                        backgroundColor: ['rgba(160, 42, 192, 0.2)','rgba(47, 42, 192, 0.2)','rgba(75, 192, 192, 0.2)', 'rgba(192, 0, 0, 0.2)','rgba(192, 75, 192, 0.5)'],
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "User Top Subreddit"
+                }
+            }
+        });
+        
+    }
+
+    function fetchUserPost(input, loginContainer){
+        fetch(`http://127.0.0.1:3000/users`).then(resp => resp.json()).then(function(userData){
+          let found = userData.find(user => user.username === input)
+          if(found){loginContainer.style.display = "none";
+          console.log("The user found")}
+          else{console.log("Please rigester first")}
+        });
+    }
+
+    function signUp(){
+        const signupContainer = document.querySelector("body") 
+        const loginContainer = document.getElementById("2a") 
+        let taco = document.getElementById("4a")
+        taco.addEventListener('click', event => {
+            event.preventDefault();
+            loginContainer.style.display = "none";
+            const signUpDiv = document.createElement('div')
+            const signUpH2 = document.createElement('h2')
+            const singUpForm = document.createElement('form')
+            signUpH2.innerHTML= "SignUp"
+            const signUpinputName = document.createElement('input')
+            signUpinputName.value ="Name"
+            const signUpinputUserName = document.createElement('input')
+            const submit= document.createElement('button')
+            submit.innerText="Submit"
+            signUpinputUserName.value ="User Name"
+            signUpDiv.appendChild(signUpH2)
+            singUpForm.appendChild(submit)
+            singUpForm.appendChild(signUpinputName)
+            singUpForm.appendChild(signUpinputUserName)
+            signUpDiv.appendChild(singUpForm)
+            signupContainer.appendChild(signUpDiv)
+            submit.addEventListener('click', function(e){
+                e.preventDefault();
+                fetchSignup(signUpinputName.value, signUpinputUserName.value)
+            })
+            // loginContainer(userNameInput, loginContainer);
+        })
+    }
+
+    function fetchSignup(name, userName){
+        fetch(`http://127.0.0.1:3000/users`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json"
+            },
+            body: JSON.stringify({username: userName})
+          }).then(function(resp) {
+            if (Math.floor(resp.status/200) === 1) {
+              console.log("Great ")
+            } else {
+              console.log("ERROR", resp)
+            }
+          });
+    }
 
     })
