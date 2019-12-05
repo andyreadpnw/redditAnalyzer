@@ -1,7 +1,15 @@
 
 
-let sample_account_name = "spez"
-const sample_account_URL = `https://www.reddit.com/user/${sample_account_name}/comments/.json`
+let userName = "spez"
+let userSearchName = "spez"
+let gildedLink = ""
+let gildedNum 
+let gildedBod = ""
+let upsLink = ""
+let upsbod = ""
+let upsNum 
+let fav_sub = ""
+
 
 const postsPerRequest = 100;
 const maxPostsToFetch = 500;
@@ -11,14 +19,11 @@ let reRankArr = [];
 
 let responses = [];
 
-// let hiddenLoad = document.getElementById("loading-image")
-// hiddenLoad.style.display = "none";
 
 document.addEventListener('DOMContentLoaded', () => {
   let hiddenApp = document.getElementById("3a")
   hiddenApp.style.display = "none";
 
- 
 
     console.log('DOM fully loaded and parsed');
     login();
@@ -27,23 +32,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function login(){
         const loginContainer = document.getElementById("2a") 
-        let taco = document.getElementById("1a")
+        let loginSubmit = document.getElementById("1a")
         let hiddenLoad = document.getElementById("loading")
         hiddenLoad.style.display = "none";
-        taco.addEventListener('click', event => {
+
+        loginSubmit.addEventListener('click', event => {
             event.preventDefault();
             const userNameInput = document.getElementById('usrLogin').value;
+            userName = userNameInput
             fetchUserPost(userNameInput, loginContainer);
         })
     }
+
 
     const handleSubmit = e => {
       responses = [];
 
         event.preventDefault();
+
         let hiddenLoad = document.getElementById("loading")
         hiddenLoad.style.display = "block";
         const userInput = document.getElementById('user').value;
+       userSearchName = userInput
+
         fetchPosts(userInput);
       };
       
@@ -179,11 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const container = document.getElementById('results-container');
           container.append(redditCard, redditCardBreak)
         }}, 3000)
+
         window.onload = function () {
 
           $("#loading").hide();    
           
              };
+
       }
 
       const analyzePosts = (allPosts) => {
@@ -221,6 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
         numCommentsSort(postInstanceArr2)
 
         upsSort(postInstanceArr3);
+
+        fetchUserSearch()
+
       }
 
       const upsSort = (postInstanceArr3) => {
@@ -233,12 +249,17 @@ document.addEventListener('DOMContentLoaded', () => {
         upsDisplay.innerHTML = ""
 
         let upsNumber = document.createElement('a')
+
+        upsNum = upsSort[0][5]
+
         upsNumber.textContent = upsSort[0][5] + " " + "Karma" + " "
         let upsBody = document.createElement('a')
         let upsH5 = document.createElement('h5')
         upsH5.innerText = "Highest Scored Comment"
-        upsBody.textContent = upsSort[0][1]
-        let upsLink = upsSort[0][6]
+        upsbod = upsSort[0][1]
+        upsBody.textContent = upsbod
+        upsLink = upsSort[0][6]
+
         upsBody.href = upsLink
 
         upsDisplay.append(upsH5, upsNumber, upsBody)
@@ -277,16 +298,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let gildedNumber = document.createElement('a')
 
-
-        gildedNumber.textContent = gildedSort[0][7] + " " + "Gilding(s)" + " "
+        gildedNum = gildedSort[0][7]
+        gildedBod = gildedSort[0][1]
+        gildedNumber.textContent = gildedNum + " " + "Gilding(s)" + " "
         let gildedBody = document.createElement('a')
         let gildedH5 = document.createElement('h5')
         gildedH5.innerText = "Most Gildings on Comments"
-        gildedBody.textContent = gildedSort[0][1]
-        let gildedLink = gildedSort[0][6]
+        gildedBody.textContent = gildedBod
+        gildedLink = gildedSort[0][6]
         gildedBody.href = gildedLink
 
         gildedDisplay.append(gildedH5, gildedNumber, gildedBody)
+
 
         if(gildedSort[0][7] < 1){
           gildedDisplay.removeChild(gildedBody, gildedH5, gildedNumber)
@@ -297,7 +320,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       function top5Subreddit(listsubreddit){
-        return subredditsCount(listsubreddit).slice(0, 5)
+        top5 = subredditsCount(listsubreddit).slice(0, 5)
+        fav_sub = top5[0][0]
+        console.log(fav_sub)
+        return top5
       }
 
       function subredditsCount(listsubreddit){
@@ -379,7 +405,7 @@ function piechart(ar){
             const singUpForm = document.createElement('form')
             signUpH2.innerHTML= "SignUp"
             const signUpinputName = document.createElement('input')
-            signUpinputName.value ="Name"
+            signUpinputName.value =""
             const signUpinputUserName = document.createElement('input')
             const submit= document.createElement('button')
             submit.innerText="Submit"
@@ -413,7 +439,34 @@ function piechart(ar){
             }
           });
     }
-
-
-
-    })
+  
+    function fetchUserSearch(){
+      fetch(`http://127.0.0.1:3000/user_searches`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+      },
+      body: JSON.stringify({
+        // username: userName,
+        username: userName, 
+        user_search: {
+        reddit_username: userSearchName,
+        top_listing_name: upsbod,
+        top_listing_likes: upsNum,
+        top_listing_link: upsLink,
+        fav_sub_name: fav_sub,
+        most_children_name: gildedBod,
+        Most_children_likes: gildedNum, 
+        most_children_link: gildedLink
+      }
+      })
+      }).then(function(resp) {
+        if (Math.floor(resp.status/200) === 1) {
+          console.log("Great ")
+        } else {
+          console.log("ERROR", resp)
+        }
+      })
+    }
+  })
