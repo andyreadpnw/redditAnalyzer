@@ -394,36 +394,36 @@ function piechart(ar){
     }
 
     function signUp(){
-        const signupContainer = document.querySelector("body") 
+        // const signupContainer = document.querySelector("body") 
         const loginContainer = document.getElementById("2a") 
         let taco = document.getElementById("4a")
         taco.addEventListener('click', event => {
             event.preventDefault();
-            loginContainer.style.display = "none";
-            const signUpDiv = document.createElement('div')
+            // loginContainer.style.display = "none";
+            // const signUpDiv = document.createElement('div')
             const signUpH2 = document.createElement('h2')
-            const singUpForm = document.createElement('form')
+            const singUpForm = document.getElementById('loginForm')
             signUpH2.innerHTML= "SignUp"
-            const signUpinputName = document.createElement('input')
-            signUpinputName.value =""
+            // const signUpinputName = document.createElement('input')
+            // signUpinputName.value =""
             const signUpinputUserName = document.createElement('input')
             const submit= document.createElement('button')
             submit.innerText="Submit"
             signUpinputUserName.value ="User Name"
-            signUpDiv.appendChild(signUpH2)
+            singUpForm.appendChild(signUpH2)
             singUpForm.appendChild(submit)
-            singUpForm.appendChild(signUpinputName)
+            // singUpForm.appendChild(signUpinputName)
             singUpForm.appendChild(signUpinputUserName)
-            signUpDiv.appendChild(singUpForm)
-            signupContainer.appendChild(signUpDiv)
+            // signUpDiv.appendChild(singUpForm)
+            // signupContainer.appendChild(signUpDiv)
             submit.addEventListener('click', function(e){
                 e.preventDefault();
-                fetchSignup(signUpinputName.value, signUpinputUserName.value)
+                fetchSignup(signUpinputUserName.value)
             })
         })
     }
 
-    function fetchSignup(name, userName){
+    function fetchSignup(userName){
         fetch(`http://127.0.0.1:3000/users`, {
             method: "POST",
             headers: {
