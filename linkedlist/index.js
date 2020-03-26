@@ -254,3 +254,18 @@
 // console.log(convert("PAYPALISHIRING", 3));
 
 //////////////////////////////////////////////////////////////////////////////// leetcode 6
+
+let intToRoman = function(num) {
+    let intNums = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+    let romans = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+    
+    let romanArr = []
+    
+    for(let i = 0; i < intNums.length; i ++){
+        while(num - intNums[i] >= 0){
+            romanArr.push(romans[i])
+            num = num - intNums[i]
+        }
+    }
+    return romanArr.join('')
+};
