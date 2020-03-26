@@ -1,4 +1,5 @@
-// function LinkedList() {
+//////////////////////////////////////////linked list example
+//function LinkedList() {
 //   let length = 0;
 //   let head = null;
 
@@ -125,7 +126,7 @@
 // console.log(conga.indexOf("puppy"));
 // console.log(conga.size());
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////// leetcode 3
 
 // var lengthOfLongestSubstring = function(s) {
 //   let max = 0;
@@ -148,22 +149,31 @@
 
 // lengthOfLongestSubstring("abacabcbb");
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////// leetcode 4
 
 // let longestPanindrome = function(string) {
 //   let length = string.length;
 //   let result = "";
 
 //   let centeredPalindrome = function(left, right) {
+//     console.log(left);
+//     console.log(right);
+//     console.log(string[left]);
+//     console.log(string[right]);
 //     while (left >= 0 && right < length && string[left] === string[right]) {
 //       left--;
 //       right++;
 //     }
+//     // console.log(string.slice(left + 1, right));
 //     return string.slice(left + 1, right);
 //   };
+
 //   for (let i = 0; i < length - 1; i++) {
-//     let oddPal = centeredPalindrome(i, i + 1);
-//     let evenPal = centeredPalindrome(i, i);
+//     let oddPal = centeredPalindrome(i, i + 1); //(0,1) returns 0,1
+//     let evenPal = centeredPalindrome(i, i); //(0, 0) returns
+
+//     console.log(oddPal);
+//     console.log(evenPal);
 
 //     if (oddPal.length > 1) {
 //       console.log(oddPal);
@@ -182,10 +192,65 @@
 //   return result;
 // };
 
-// console.log(longestPanindrome("nan noon is redder"));
+// console.log(longestPanindrome("dood dad nnaann"));
 
+//////////////////////////////////////////////////////////////////////// leetcode 5
 
-////////////////////////////////////////////////////////////////////////
+// var convert = function(s, numRows) {
+//   let x = -1;
+//   let y = 0;
+//   let resultArr = [];
+//   let finalArr = [];
+//   let isZigging = true;
+//   let dumbVar = true;
 
+//   for (let i = 0; i < s.length; i++) {
+//     console.log(x);
+//     dumbVar = true;
+//     if (isZigging === true) {
+//       if (x < numRows - 1) {
+//         x++;
+//         console.log([x, y, s[i]]);
+//         resultArr.push([x, y, s[i]]);
+//         console.log("zigging");
+//       } else {
+//         x--;
+//         y++;
+//         resultArr.push([x, y, s[i]]);
+//         console.log([x, y, s[i]]);
+//         isZigging = false;
+//         console.log("begin zagging");
+//         dumbVar = false;
+//       }
+//     }
+//     if (isZigging === false && dumbVar === true) {
+//       if (x > -1) {
+//         x--;
+//         y++;
+//         resultArr.push([x, y, s[i]]);
+//         console.log([x, y, s[i]]);
+//         console.log("zagging");
+//       }
+//       if (x === -1) {
+//         resultArr.push([x, y, s[i]]);
+//         isZigging = true;
+//         console.log("zagging and hit first row");
+//       }
+//     }
 
+//     // console.log(resultArr)
 
+//     // for (let j = 0; j < s.length; j++) {
+//     //   let increment = 0;
+//     //   let middleArr = resultArr.filter(result => result[increment] === j);
+//     //   finalArr.push(middleArr);
+//     //   middleArr = 0;
+//     //   increment++;
+//     // }
+//   }
+//   return finalArr;
+// };
+
+// console.log(convert("PAYPALISHIRING", 3));
+
+//////////////////////////////////////////////////////////////////////////////// leetcode 6
