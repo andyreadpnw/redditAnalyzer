@@ -269,3 +269,27 @@ let intToRoman = function(num) {
     }
     return romanArr.join('')
 };
+
+////////////////////////////////////////////////////////////
+
+
+// var lengthOfLongestSubstring = function(s) {
+//   let max = 0;
+//   const newSet = new Set();
+//   let start = 0;
+//   // let charArr = s.split('')
+
+//   for (let i = 0; i < s.length; i++) {
+//     if (newSet.has(s[i])) {
+//       while (s[start] !== s[i]) {
+//         newSet.delete(s[start++]);
+//       }
+//     }
+//     newSet.add(s[i]);
+//     max = Math.max(max, newSet.size);
+//   }
+//   console.log(max);
+//   return max;
+// };
+
+// lengthOfLongestSubstring("abacabcbb");
