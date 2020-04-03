@@ -296,25 +296,75 @@ let intToRoman = function(num) {
 
 ///////////////////////////////////////////
 
-var multiply = function(num1, num2) {
-    var result = 0;
-    // if any of the nums is 0, automatically it is zero
-    if(num1[0] === '0' || num2[0] === '0') {return'0'};
+// var multiply = function(num1, num2) {
+//     var result = 0;
+//     // if any of the nums is 0, automatically it is zero
+//     if(num1[0] === '0' || num2[0] === '0') {return'0'};
     
-    var length1 = num1.length - 1;
-    var length2 = num2.length - 1;
-    var counterI = 0;
-    var iBase10 = 1;
-    for(var i = length1; i >= 0; i--){
-      iBase10 = Math.pow(10, counterI)
-      counterI++;
-      var counterJ = 0
-      var jBase10 = 1;
-      for(var j = length2; j >= 0; j--){
-        jBase10 = Math.pow(10, counterJ)
-        counterJ++;
-        result += (num1[i] * iBase10) * (num2[j] * jBase10)
+//     var length1 = num1.length - 1;
+//     var length2 = num2.length - 1;
+//     var counterI = 0;
+//     var iBase10 = 1;
+//     for(var i = length1; i >= 0; i--){
+//       iBase10 = Math.pow(10, counterI)
+//       counterI++;
+//       var counterJ = 0
+//       var jBase10 = 1;
+//       for(var j = length2; j >= 0; j--){
+//         jBase10 = Math.pow(10, counterJ)
+//         counterJ++;
+//         result += (num1[i] * iBase10) * (num2[j] * jBase10)
+//       }
+//     }
+//     return result.toString()
+//   };
+
+//////////////////////////////////////////////////
+
+var isValidSudoku = function(board) {
+  let valid = true;
+  
+  const validate = digits => {
+      digits = digits.filter(v => v !== '.').map(n => Number(n)).sort((a, b) => a - b);
+      
+      for(let k = 0; k < digits.length -1; k++) {
+          if(digits[k] === digits[k+1]) {
+              valid = false;
+          }
       }
-    }
-    return result.toString()
-  };
+  }
+  
+  // validate rows
+  for(let r = 0; r < board.length; r++) {
+      let digits = board[r]
+      
+      validate(digits);
+  }
+  
+  // validate cols
+  for(let c = 0; c < board[0].length; c++) {
+      let digits = [];
+      
+      for(let k = 0; k < board.length; k++) {
+          digits.push(board[k][c]);
+      }
+      
+      validate(digits);
+  }
+  
+  // validate 3x3
+  for(let r = 0; r < board.length; r+=3) {
+      for(let c = 0; c < board[0].length; c+=3) {
+          let digits = [];
+          for(let k = 0; k < 3; k++) {
+              for(let n = 0; n < 3; n++) {
+                  digits.push(board[r+k][c+n]);
+              }
+          }
+          
+          validate(digits);
+      }
+  }
+  
+  return valid;
+};
