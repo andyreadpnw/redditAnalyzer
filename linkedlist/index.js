@@ -368,3 +368,24 @@ var isValidSudoku = function(board) {
   
   return valid;
 };
+
+
+/////////////////////////////////////////
+
+
+var groupAnagrams = function(strs) {
+  const prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]; 
+  let res = {};
+  for(let i = 0; i<strs.length;i++){
+    let key = 1;
+    for(let j = 0;j<strs[i].length;j++){
+      key *= prime[strs[i][j].charCodeAt(0)-'a'.charCodeAt(0)];
+    }
+    if(res[key]!==undefined){
+      res[key].push(strs[i]);
+    }else{
+      res[key]=[strs[i]];
+    }	
+  }
+  return Object.values(res);
+};
