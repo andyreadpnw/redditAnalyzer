@@ -389,3 +389,31 @@ var groupAnagrams = function(strs) {
   }
   return Object.values(res);
 };
+
+
+/////////////////////////////////////////
+
+var swapPairs = function(head) {
+    if(!head || !head.next) {
+        return head;
+    }
+    
+    first = head;
+    prev = null;
+    
+    while(first) {
+        second = first.next;
+        prev == null ? head = second: prev.next = second;
+		// if odd no of values, set the prev.next = first
+        second ? swapNodes(first, second) : prev.next = first
+        prev = first;
+        first = first.next;
+    }
+    
+    return head;
+};
+    
+function swapNodes(first, second) {
+    first.next = second.next;        
+    second.next = first;
+}
