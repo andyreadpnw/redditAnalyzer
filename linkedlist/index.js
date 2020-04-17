@@ -321,99 +321,134 @@ let intToRoman = function(num) {
 
 //////////////////////////////////////////////////
 
-var isValidSudoku = function(board) {
-  let valid = true;
+// var isValidSudoku = function(board) {
+//   let valid = true;
   
-  const validate = digits => {
-      digits = digits.filter(v => v !== '.').map(n => Number(n)).sort((a, b) => a - b);
+//   const validate = digits => {
+//       digits = digits.filter(v => v !== '.').map(n => Number(n)).sort((a, b) => a - b);
       
-      for(let k = 0; k < digits.length -1; k++) {
-          if(digits[k] === digits[k+1]) {
-              valid = false;
-          }
-      }
-  }
+//       for(let k = 0; k < digits.length -1; k++) {
+//           if(digits[k] === digits[k+1]) {
+//               valid = false;
+//           }
+//       }
+//   }
   
-  // validate rows
-  for(let r = 0; r < board.length; r++) {
-      let digits = board[r]
+//   // validate rows
+//   for(let r = 0; r < board.length; r++) {
+//       let digits = board[r]
       
-      validate(digits);
-  }
+//       validate(digits);
+//   }
   
-  // validate cols
-  for(let c = 0; c < board[0].length; c++) {
-      let digits = [];
+//   // validate cols
+//   for(let c = 0; c < board[0].length; c++) {
+//       let digits = [];
       
-      for(let k = 0; k < board.length; k++) {
-          digits.push(board[k][c]);
-      }
+//       for(let k = 0; k < board.length; k++) {
+//           digits.push(board[k][c]);
+//       }
       
-      validate(digits);
-  }
+//       validate(digits);
+//   }
   
-  // validate 3x3
-  for(let r = 0; r < board.length; r+=3) {
-      for(let c = 0; c < board[0].length; c+=3) {
-          let digits = [];
-          for(let k = 0; k < 3; k++) {
-              for(let n = 0; n < 3; n++) {
-                  digits.push(board[r+k][c+n]);
-              }
-          }
+//   // validate 3x3
+//   for(let r = 0; r < board.length; r+=3) {
+//       for(let c = 0; c < board[0].length; c+=3) {
+//           let digits = [];
+//           for(let k = 0; k < 3; k++) {
+//               for(let n = 0; n < 3; n++) {
+//                   digits.push(board[r+k][c+n]);
+//               }
+//           }
           
-          validate(digits);
-      }
-  }
+//           validate(digits);
+//       }
+//   }
   
-  return valid;
-};
+//   return valid;
+// };
 
 
-/////////////////////////////////////////
+// /////////////////////////////////////////
 
 
-var groupAnagrams = function(strs) {
-  const prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]; 
-  let res = {};
-  for(let i = 0; i<strs.length;i++){
-    let key = 1;
-    for(let j = 0;j<strs[i].length;j++){
-      key *= prime[strs[i][j].charCodeAt(0)-'a'.charCodeAt(0)];
-    }
-    if(res[key]!==undefined){
-      res[key].push(strs[i]);
-    }else{
-      res[key]=[strs[i]];
-    }	
-  }
-  return Object.values(res);
-};
+// var groupAnagrams = function(strs) {
+//   const prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]; 
+//   let res = {};
+//   for(let i = 0; i<strs.length;i++){
+//     let key = 1;
+//     for(let j = 0;j<strs[i].length;j++){
+//       key *= prime[strs[i][j].charCodeAt(0)-'a'.charCodeAt(0)];
+//     }
+//     if(res[key]!==undefined){
+//       res[key].push(strs[i]);
+//     }else{
+//       res[key]=[strs[i]];
+//     }	
+//   }
+//   return Object.values(res);
+// };
 
 
-/////////////////////////////////////////
+// /////////////////////////////////////////
 
-var swapPairs = function(head) {
-    if(!head || !head.next) {
-        return head;
-    }
+// var swapPairs = function(head) {
+//     if(!head || !head.next) {
+//         return head;
+//     }
     
-    first = head;
-    prev = null;
+//     first = head;
+//     prev = null;
     
-    while(first) {
-        second = first.next;
-        prev == null ? head = second: prev.next = second;
-		// if odd no of values, set the prev.next = first
-        second ? swapNodes(first, second) : prev.next = first
-        prev = first;
-        first = first.next;
-    }
+//     while(first) {
+//         second = first.next;
+//         prev == null ? head = second: prev.next = second;
+// 		// if odd no of values, set the prev.next = first
+//         second ? swapNodes(first, second) : prev.next = first
+//         prev = first;
+//         first = first.next;
+//     }
     
-    return head;
-};
+//     return head;
+// };
     
-function swapNodes(first, second) {
-    first.next = second.next;        
-    second.next = first;
-}
+// function swapNodes(first, second) {
+//     first.next = second.next;        
+//     second.next = first;
+// }
+
+//////////////////////////////
+
+var letterCombinations = function(digits) {
+    if(digits.length == 0) return [];
+      const phone = {
+     '2': ['a', 'b', 'c'],
+     '3': ['d', 'e', 'f'],
+     '4': ['g', 'h', 'i'],
+     '5': ['j', 'k', 'l'],
+     '6': ['m', 'n', 'o'],
+     '7': ['p', 'q', 'r', 's'],
+     '8': ['t', 'u', 'v'],
+     '9': ['w', 'x', 'y', 'z']
+   };
+   
+   let output = [];
+   
+   function backtrack(combination, nums){
+     if(nums.length == 0) output.push(combination);
+     else {
+       let n = nums.slice(0, 1);
+       let letters = phone[n];
+       for(let i in letters){
+         let letter = letters[i]
+         backtrack(combination + letter, nums.slice(1))
+       }
+     }
+   }
+ 
+   if(digits.length != 0){
+     backtrack('', digits);
+     return output;
+   }
+ }
