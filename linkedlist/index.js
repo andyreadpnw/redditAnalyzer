@@ -390,72 +390,38 @@ let intToRoman = function(num) {
 //   return Object.values(res);
 // };
 
+///////////////////////
+var findSubstring = function (s, words) {
+	// corner case
+	if (s == null || words == null || words.length == 0) {
+		return [];
+	}
 
-// /////////////////////////////////////////
+	// normal case
+	let res = [];
+	let n = words.length;
+	let m = words[0].length;
+	let map = {};
+	for (let str of words) {
+		map[str] = (map[str] || 0) + 1;
+	}
 
-// var swapPairs = function(head) {
-//     if(!head || !head.next) {
-//         return head;
-//     }
-    
-//     first = head;
-//     prev = null;
-    
-//     while(first) {
-//         second = first.next;
-//         prev == null ? head = second: prev.next = second;
-// 		// if odd no of values, set the prev.next = first
-//         second ? swapNodes(first, second) : prev.next = first
-//         prev = first;
-//         first = first.next;
-//     }
-    
-//     return head;
-// };
-    
-// function swapNodes(first, second) {
-//     first.next = second.next;        
-//     second.next = first;
-// }
-
-//////////////////////////////
-
-// var letterCombinations = function(digits) {
-//     if(digits.length == 0) return [];
-//       const phone = {
-//      '2': ['a', 'b', 'c'],
-//      '3': ['d', 'e', 'f'],
-//      '4': ['g', 'h', 'i'],
-//      '5': ['j', 'k', 'l'],
-//      '6': ['m', 'n', 'o'],
-//      '7': ['p', 'q', 'r', 's'],
-//      '8': ['t', 'u', 'v'],
-//      '9': ['w', 'x', 'y', 'z']
-//    };
-   
-//    let output = [];
-   
-//    function backtrack(combination, nums){
-//      if(nums.length == 0) output.push(combination);
-//      else {
-//        let n = nums.slice(0, 1);
-//        let letters = phone[n];
-//        for(let i in letters){
-//          let letter = letters[i]
-//          backtrack(combination + letter, nums.slice(1))
-//        }
-//      }
-//    }
- 
-//    if(digits.length != 0){
-//      backtrack('', digits);
-//      return output;
-//    }
-//  }
-
-
-
-///////////////////
-
-
-// This function isnt mine but review why it works
+	for (let i = 0; i <= s.length - n * m; i++) {
+		let copy = { ...map };
+		let k = n;
+		let j = i;
+		while (k > 0) {
+			let str = s.substring(j, j + m);
+			if (!copy[str] || copy[str] < 1) {
+				break;
+			}
+			copy[str]--;
+			k--;
+			j += m;
+		}
+		if (k == 0) {
+			res.push(i);
+		}
+	}
+	return res;
+};
