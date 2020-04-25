@@ -433,3 +433,44 @@ var isMatch = function(s, p) {
     let regex = new RegExp(p)
 	return s.match(regex) ? s === s.match(regex)[0] : false
 };
+
+////////////////////////////
+
+var jump = function(nums) {
+    
+    if(!nums.length){
+        return 0
+    }
+    if(nums.length === 1){
+        return 0
+    }
+    
+    let queue = [{value: nums[0], index:0, depth:0}]
+    let vis = {}
+    while(queue.length){
+        let node = queue.shift()
+        if(node.value >= (nums.length-1 - node.index)){
+           return node.depth+1
+        }
+        if(vis[node.index])
+            continue
+        
+        vis[node.index] = true
+        let tempQueue = []
+        let tempVisited = {}
+        for(let i=node.value; i>= 1;i--){
+            let value = nums[node.index+i]
+            if(!tempVisited[value]){
+                tempQueue.push({
+                    value, 
+                    index:node.index+i,
+                    depth:node.depth+1
+                })
+                tempVisited[value] = true
+            }
+        }
+        queue.push(...tempQueue)
+        
+    }
+    return 0
+};
