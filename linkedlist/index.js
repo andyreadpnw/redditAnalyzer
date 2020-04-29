@@ -256,22 +256,35 @@
 //////////////////////////////////////////////////////////////////////////////// leetcode 6
 
 let intToRoman = function(num) {
-    let intNums = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
-    let romans = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
-    
-    let romanArr = []
-    
-    for(let i = 0; i < intNums.length; i ++){
-        while(num - intNums[i] >= 0){
-            romanArr.push(romans[i])
-            num = num - intNums[i]
-        }
+  let intNums = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+  let romans = [
+    "M",
+    "CM",
+    "D",
+    "CD",
+    "C",
+    "XC",
+    "L",
+    "XL",
+    "X",
+    "IX",
+    "V",
+    "IV",
+    "I",
+  ];
+
+  let romanArr = [];
+
+  for (let i = 0; i < intNums.length; i++) {
+    while (num - intNums[i] >= 0) {
+      romanArr.push(romans[i]);
+      num = num - intNums[i];
     }
-    return romanArr.join('')
+  }
+  return romanArr.join("");
 };
 
 ////////////////////////////////////////////////////////////
-
 
 // var lengthOfLongestSubstring = function(s) {
 //   let max = 0;
@@ -300,7 +313,7 @@ let intToRoman = function(num) {
 //     var result = 0;
 //     // if any of the nums is 0, automatically it is zero
 //     if(num1[0] === '0' || num2[0] === '0') {return'0'};
-    
+
 //     var length1 = num1.length - 1;
 //     var length2 = num2.length - 1;
 //     var counterI = 0;
@@ -323,35 +336,35 @@ let intToRoman = function(num) {
 
 // var isValidSudoku = function(board) {
 //   let valid = true;
-  
+
 //   const validate = digits => {
 //       digits = digits.filter(v => v !== '.').map(n => Number(n)).sort((a, b) => a - b);
-      
+
 //       for(let k = 0; k < digits.length -1; k++) {
 //           if(digits[k] === digits[k+1]) {
 //               valid = false;
 //           }
 //       }
 //   }
-  
+
 //   // validate rows
 //   for(let r = 0; r < board.length; r++) {
 //       let digits = board[r]
-      
+
 //       validate(digits);
 //   }
-  
+
 //   // validate cols
 //   for(let c = 0; c < board[0].length; c++) {
 //       let digits = [];
-      
+
 //       for(let k = 0; k < board.length; k++) {
 //           digits.push(board[k][c]);
 //       }
-      
+
 //       validate(digits);
 //   }
-  
+
 //   // validate 3x3
 //   for(let r = 0; r < board.length; r+=3) {
 //       for(let c = 0; c < board[0].length; c+=3) {
@@ -361,20 +374,18 @@ let intToRoman = function(num) {
 //                   digits.push(board[r+k][c+n]);
 //               }
 //           }
-          
+
 //           validate(digits);
 //       }
 //   }
-  
+
 //   return valid;
 // };
 
-
 // /////////////////////////////////////////
 
-
 // var groupAnagrams = function(strs) {
-//   const prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103]; 
+//   const prime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103];
 //   let res = {};
 //   for(let i = 0; i<strs.length;i++){
 //     let key = 1;
@@ -385,92 +396,125 @@ let intToRoman = function(num) {
 //       res[key].push(strs[i]);
 //     }else{
 //       res[key]=[strs[i]];
-//     }	
+//     }
 //   }
 //   return Object.values(res);
 // };
 
 ///////////////////////
-var findSubstring = function (s, words) {
-	// corner case
-	if (s == null || words == null || words.length == 0) {
-		return [];
-	}
+var findSubstring = function(s, words) {
+  // corner case
+  if (s == null || words == null || words.length == 0) {
+    return [];
+  }
 
-	// normal case
-	let res = [];
-	let n = words.length;
-	let m = words[0].length;
-	let map = {};
-	for (let str of words) {
-		map[str] = (map[str] || 0) + 1;
-	}
+  // normal case
+  let res = [];
+  let n = words.length;
+  let m = words[0].length;
+  let map = {};
+  for (let str of words) {
+    map[str] = (map[str] || 0) + 1;
+  }
 
-	for (let i = 0; i <= s.length - n * m; i++) {
-		let copy = { ...map };
-		let k = n;
-		let j = i;
-		while (k > 0) {
-			let str = s.substring(j, j + m);
-			if (!copy[str] || copy[str] < 1) {
-				break;
-			}
-			copy[str]--;
-			k--;
-			j += m;
-		}
-		if (k == 0) {
-			res.push(i);
-		}
-	}
-	return res;
+  for (let i = 0; i <= s.length - n * m; i++) {
+    let copy = { ...map };
+    let k = n;
+    let j = i;
+    while (k > 0) {
+      let str = s.substring(j, j + m);
+      if (!copy[str] || copy[str] < 1) {
+        break;
+      }
+      copy[str]--;
+      k--;
+      j += m;
+    }
+    if (k == 0) {
+      res.push(i);
+    }
+  }
+  return res;
 };
-
 
 /////////////////////////////////
 
 var isMatch = function(s, p) {
-    let regex = new RegExp(p)
-	return s.match(regex) ? s === s.match(regex)[0] : false
+  let regex = new RegExp(p);
+  return s.match(regex) ? s === s.match(regex)[0] : false;
 };
 
 ////////////////////////////
 
 var jump = function(nums) {
-    
-    if(!nums.length){
-        return 0
+  if (!nums.length) {
+    return 0;
+  }
+  if (nums.length === 1) {
+    return 0;
+  }
+
+  let queue = [{ value: nums[0], index: 0, depth: 0 }];
+  let vis = {};
+  while (queue.length) {
+    let node = queue.shift();
+    if (node.value >= nums.length - 1 - node.index) {
+      return node.depth + 1;
     }
-    if(nums.length === 1){
-        return 0
+    if (vis[node.index]) continue;
+
+    vis[node.index] = true;
+    let tempQueue = [];
+    let tempVisited = {};
+    for (let i = node.value; i >= 1; i--) {
+      let value = nums[node.index + i];
+      if (!tempVisited[value]) {
+        tempQueue.push({
+          value,
+          index: node.index + i,
+          depth: node.depth + 1,
+        });
+        tempVisited[value] = true;
+      }
     }
-    
-    let queue = [{value: nums[0], index:0, depth:0}]
-    let vis = {}
-    while(queue.length){
-        let node = queue.shift()
-        if(node.value >= (nums.length-1 - node.index)){
-           return node.depth+1
-        }
-        if(vis[node.index])
-            continue
-        
-        vis[node.index] = true
-        let tempQueue = []
-        let tempVisited = {}
-        for(let i=node.value; i>= 1;i--){
-            let value = nums[node.index+i]
-            if(!tempVisited[value]){
-                tempQueue.push({
-                    value, 
-                    index:node.index+i,
-                    depth:node.depth+1
-                })
-                tempVisited[value] = true
-            }
-        }
-        queue.push(...tempQueue)
-        
-    }
-    return 0
+    queue.push(...tempQueue);
+  }
+  return 0;
 };
+
+////////////////////////////////////
+
+function largestRectangleArea(height) {
+  if (height == null || height.length == 0) {
+    return 0;
+  }
+
+  var stack = [];
+
+  var max = 0;
+  var i = 0;
+
+  while (i < height.length) {
+    //push index to stack when the current height is larger than the previous one
+    if (stack.length == 0 || height[i] >= height[stack[stack.length - 1]]) {
+      stack.push(i);
+      i++;
+    } else {
+      //calculate max value when the current height is less than the previous one
+      var p = stack.pop();
+      var h = height[p];
+      var w = stack.length == 0 ? i : i - stack[stack.length - 1] - 1;
+      max = Math.max(h * w, max);
+    }
+  }
+
+  while (stack.length != 0) {
+    var p = stack.pop();
+    var h = height[p];
+    var w = stack.length == 0 ? i : i - stack[stack.length - 1] - 1;
+    max = Math.max(h * w, max);
+  }
+
+  return max;
+}
+console.log(largestRectangleArea([2, 1, 5, 6, 2, 3]));
