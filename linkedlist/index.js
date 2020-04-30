@@ -518,3 +518,32 @@ function largestRectangleArea(height) {
   return max;
 }
 console.log(largestRectangleArea([2, 1, 5, 6, 2, 3]));
+
+//////////////////////////////////
+
+function getAB([x1, y1], [x2, y2]) { // slope/intercept of y = ax + b
+  var a;
+  return x1 === x2
+      ? [Infinity, x1]
+      : [a = (y2 - y1) / (x2 - x1), y1 - a * x1];
+}
+
+var points = [[1, 1], [3, 2], [5, 3], [4, 1], [2, 3], [1, 4]],
+  collection = {},
+  usedPoints = new Set;
+
+points.forEach((p1, i, a) => {
+  if (usedPoints.has(p1.toString())) return;
+  a.slice(i + 1).forEach((p2, j, b) => {
+      if (usedPoints.has(p2.toString())) return;
+      var key = JSON.stringify(getAB(p1, p2));
+      collection[key] = collection[key] || new Set;
+      collection[key].add(p1);
+      collection[key].add(p2);
+      usedPoints.add(p1.toString());
+  });
+});
+
+console.log(Math.max(...Object.values(collection).map(s => s.size)));
+
+console.log(Object.entries(collection).map(([k, v]) => [k, [...v].map(w => w.join(' '))]));
