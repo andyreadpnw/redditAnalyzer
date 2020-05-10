@@ -574,3 +574,12 @@ var isAnagram = function(s, t) {
 
 
 ///////
+
+var deleteNode = function(node) {
+  node.val = node.next.val
+  node.next = node.next.next
+  };
+
+  ////////
+
+  
