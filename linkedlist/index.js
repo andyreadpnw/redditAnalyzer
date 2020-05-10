@@ -582,4 +582,18 @@ var deleteNode = function(node) {
 
   ////////
 
-  
+  var lowestCommonAncestor = function(root, p, q) { 
+    if(!root) return null;
+    var childInLeft = lowestCommonAncestor(root.left, p, q);
+    var childInRight = lowestCommonAncestor(root.right, p, q);
+
+    if(root == p || root == q) {
+        return root;
+    }
+
+    if(childInLeft && childInRight) {
+        return root;
+    }
+
+    return childInLeft || childInRight; 
+};
