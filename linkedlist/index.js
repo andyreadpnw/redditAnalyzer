@@ -597,3 +597,19 @@ var deleteNode = function(node) {
 
     return childInLeft || childInRight; 
 };
+
+/////////////////////
+
+var isHappy = function(n) {
+  const seen = new Set()
+  while (true) {
+      if (n === 1) return true
+      if (seen.has(n)) return false
+      else {
+          seen.add(n)
+          let sum = 0
+          for (const num of n.toString()) sum += Math.pow(Number(num), 2)
+          n = sum
+      }
+  }
+};
